@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "C:\\Users\\edelacruz\\Documents\\PlatformIO\\Projects\\AlarmaESP8266"
+		},
+		{
+			"name": "ocs_esp32_mqtt",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
