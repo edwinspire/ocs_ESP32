@@ -1,11 +1,17 @@
 <script>
   import { onMount } from "svelte/internal";
   var deviceSettings = {
+    websocketHost: "",
+    CACert: "",
     latitude: 0,
     longitude: 0,
     deviceId: "",
     input01: { name: "" },
-    ssid: [{ssid: '', pwd: ''}, {ssid: '', pwd: ''}, {ssid: '', pwd: ''}]
+    ssid: [
+      { ssid: "", pwd: "" },
+      { ssid: "", pwd: "" },
+      { ssid: "", pwd: "" },
+    ],
   };
 
   function getLocation() {
@@ -22,12 +28,27 @@
   }
 
   async function getSettings() {
-    alert("Se leerá la configuracion");
-
     let response = await fetch("/getsettings");
-    deviceSettings = await response.json();
+    let data = await response.json();
 
     console.log("Retorna settings", deviceSettings);
+
+    if (data) {
+      deviceSettings = {
+        CACert : data.CACert ||'',
+        websocketHost: data.websocketHost || '',
+        latitude: data.latitude || 0,
+        longitude: data.longitude || 0,
+        deviceId: data.deviceId || "",
+        input01: { name: data.input01.name || "" },
+      };
+      deviceSettings.ssid = [];
+      if (data.ssid && Array.isArray(data.ssid)) {
+        data.ssid.forEach((element) => {
+          deviceSettings.ssid.push({ ssid: element.ssid, pwd: element.pwd });
+        });
+      }
+    }
   }
 
   function setSettings() {
@@ -77,47 +98,20 @@
   <br />
   <div>
     <h3>WIFI</h3>
+
     <div class="flex-container">
       <div class="flex-item">
-        <label for="fname">SSID 1</label>
-        <input
-          type="text"
-          name="ssid1"
-          bind:value={deviceSettings.ssid[0].ssid}
-        />
-        <label for="fname">SSID 2</label>
-        <input
-          type="text"
-          name="ssid2"
-          bind:value={deviceSettings.ssid[1].ssid}
-        />
-        <label for="fname">SSID 3</label>
-        <input
-          type="text"
-          name="ssid3"
-          bind:value={deviceSettings.ssid[2].ssid}
-        />
+        {#each deviceSettings.ssid as { wifi }, i}
+          <label for="fname">SSID {i}</label>
+          <input type="text" bind:value={deviceSettings.ssid[1].ssid} />
+        {/each}
       </div>
 
       <div class="flex-item">
-        <label for="lname">Password 1</label>
-        <input
-          type="password"
-          name="pwd1"
-          bind:value={deviceSettings.ssid[0].pwd}
-        />
-        <label for="lname">Password 2</label>
-        <input
-          type="password"
-          name="pwd2"
-          bind:value={deviceSettings.ssid[1].pwd}
-        />
-        <label for="lname">Password 3</label>
-        <input
-          type="password"
-          name="pwd3"
-          bind:value={deviceSettings.ssid[2].pwd}
-        />
+        {#each deviceSettings.ssid as { wifi }, i}
+          <label for="lname">Password {i}</label>
+          <input type="password" bind:value={deviceSettings.ssid[0].pwd} />
+        {/each}
       </div>
     </div>
   </div>
@@ -140,6 +134,17 @@
         >Get Geolocation</button
       >
     </div>
+  </div>
+
+  <br />
+  <div>
+    <h3>SSL Certificate</h3>
+    <textarea
+      style="background-color : #3cbc8d; width: 100%;"
+      rows="25"
+      cols="50"
+      bind:value={deviceSettings.CACert}
+    />
   </div>
 </div>
 
