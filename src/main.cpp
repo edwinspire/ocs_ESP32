@@ -6,11 +6,16 @@
 
 //#include <../include/wifi.cpp>
 #include <../lib/ocs_arduino_library/src/opencommunitysafety.cpp>
+#include <../lib/ocs_arduino_library/src/WebServer.cpp>
 
 using namespace websockets;
 using namespace ocs;
 
-WiFiServer server(80);
+// WiFiServer server(80);
+WebAdmin ocsWebAdmin(80);
+// WebServer WServer(81);
+
+/*
 // Current time
 unsigned long currentTime = millis();
 // Previous time
@@ -19,6 +24,7 @@ unsigned long previousTime = 0;
 const long timeoutTime = 2000;
 // Variable to store the HTTP request
 String header;
+*/
 
 Preferences pref;
 String deviceId = "";
@@ -28,6 +34,7 @@ const int gpio_in_01 = 32;
 const int gpio_out_01 = 21;
 const String websockets_server_host = "wss://open-community-safety.herokuapp.com/ws/device";
 
+/*
 String responseRoot()
 {
     return R"(<!DOCTYPE html>
@@ -60,8 +67,9 @@ String responsegetSettings()
     Serial.println(outputJson);
     return outputJson;
 }
+*/
 
-const char* echo_org_ssl_ca_cert = R"(-----BEGIN CERTIFICATE-----
+const char *echo_org_ssl_ca_cert = R"(-----BEGIN CERTIFICATE-----
 MIIEDzCCAvegAwIBAgIBADANBgkqhkiG9w0BAQUFADBoMQswCQYDVQQGEwJVUzEl
 MCMGA1UEChMcU3RhcmZpZWxkIFRlY2hub2xvZ2llcywgSW5jLjEyMDAGA1UECxMp
 U3RhcmZpZWxkIENsYXNzIDIgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMDQw
@@ -89,15 +97,28 @@ WQPJIrSPnNVeKtelttQKbfi3QBFGmh95DmK/D5fs4C8fF5Q=
 
 WiFiMulti wifiMulti;
 
+void cb(WiFiClient *client, String path, String method)
+{
+    Serial.println("Entra en el callback " + method);
+}
+
+void notFound(AsyncWebServerRequest *request)
+{
+    request->send(404, "text/plain", "Not found");
+}
+
 void setup()
 {
 
     Serial.begin(115200);
     delay(10);
 
+    ocsWebAdmin.onNotFound(notFound);
+    ocsWebAdmin.setup();
+    //   ocsWebAdmin.onRequest(cb);
     ocsClass.setSSID("opencommunitysafety", "ocs@qwerty"); // Valor por default
     ocsClass.setSSID("edwinspire", "Caracol1980");
-    ocsClass.setSSID("edwinspiremovil", "libpq1983");
+    ocsClass.setSSID("edwinspiremovil", "libp1983");
 
     ocsClass.setup(websockets_server_host, deviceId, gpio_in_01, gpio_out_01, echo_org_ssl_ca_cert);
 
@@ -122,8 +143,9 @@ void setup()
         Serial.println("WiFi connected");
         Serial.println("IP address: ");
         Serial.println(WiFi.localIP());
-
-        server.begin();
+        ocsWebAdmin.begin();
+        // server.begin();
+        // ocsWebAdmin.setup();
 
         ocsClass.connectWS();
     }
@@ -138,140 +160,144 @@ void loop()
         delay(1000);
     }
 
-    WiFiClient client = server.available(); // Listen for incoming clients
+    // ocsWebAdmin.loop(true);
 
-    if (client)
-    { // If a new client connects,
-        currentTime = millis();
-        previousTime = currentTime;
-        Serial.println("New Client."); // print a message out in the serial port
-        String currentLine = "";       // make a String to hold incoming data from the client
-        volatile int returnPage = 0;
+    /*
+        WiFiClient client = server.available(); // Listen for incoming clients
 
-        while (client.connected() && currentTime - previousTime <= timeoutTime)
-        { // loop while the client's connected
+        if (client)
+        { // If a new client connects,
             currentTime = millis();
-            if (client.available())
-            {                           // if there's bytes to read from the client,
-                char c = client.read(); // read a byte, then
-                Serial.write(c);        // print it out the serial monitor
-                header += c;
-                if (c == '\n')
-                { // if the byte is a newline character
-                    // if the current line is blank, you got two newline characters in a row.
-                    // that's the end of the client HTTP request, so send a response:
-                    if (currentLine.length() == 0)
-                    {
+            previousTime = currentTime;
+            Serial.println("New Client."); // print a message out in the serial port
+            String currentLine = "";       // make a String to hold incoming data from the client
+            volatile int returnPage = 0;
 
-                        switch (returnPage)
+            while (client.connected() && currentTime - previousTime <= timeoutTime)
+            { // loop while the client's connected
+                currentTime = millis();
+                if (client.available())
+                {                           // if there's bytes to read from the client,
+                    char c = client.read(); // read a byte, then
+                    Serial.write(c);        // print it out the serial monitor
+                    header += c;
+                    if (c == '\n')
+                    { // if the byte is a newline character
+                        // if the current line is blank, you got two newline characters in a row.
+                        // that's the end of the client HTTP request, so send a response:
+                        if (currentLine.length() == 0)
                         {
-                        case 0:
-                            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                            // and a content-type so the client knows what's coming, then a blank line:
-                            client.println("HTTP/1.1 200 OK");
-                            client.println("Content-type:text/html");
-                            client.println("Connection: close");
-                            client.println();
 
-                            client.println(responseRoot());
-                            break;
-                        case 1:
-                            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                            // and a content-type so the client knows what's coming, then a blank line:
-                            client.println("HTTP/1.1 200 OK");
-                            client.println("Content-type:application/javascript");
-                            client.println("Connection: close");
-                            client.println();
+                            switch (returnPage)
+                            {
+                            case 0:
+                                // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+                                // and a content-type so the client knows what's coming, then a blank line:
+                                client.println("HTTP/1.1 200 OK");
+                                client.println("Content-type:text/html");
+                                client.println("Connection: close");
+                                client.println();
 
-                            client.println(responsebundleJS());
-                            break;
-                        case 2:
-                            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                            // and a content-type so the client knows what's coming, then a blank line:
-                            client.println("HTTP/1.1 200 OK");
-                            client.println("Content-type:text/css");
-                            client.println("Connection: close");
-                            client.println();
+                                client.println(responseRoot());
+                                break;
+                            case 1:
+                                // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+                                // and a content-type so the client knows what's coming, then a blank line:
+                                client.println("HTTP/1.1 200 OK");
+                                client.println("Content-type:application/javascript");
+                                client.println("Connection: close");
+                                client.println();
 
-                            client.println(responseCSS());
-                            break;
-                        case 3:
-                            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-                            // and a content-type so the client knows what's coming, then a blank line:
-                            client.println("HTTP/1.1 200 OK");
-                            client.println("Content-type:application/json");
-                            client.println("X-Powered-By: ESP32");
-                            client.println("Connection: close");
-                            client.println();
+                                client.println(responsebundleJS());
+                                break;
+                            case 2:
+                                // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+                                // and a content-type so the client knows what's coming, then a blank line:
+                                client.println("HTTP/1.1 200 OK");
+                                client.println("Content-type:text/css");
+                                client.println("Connection: close");
+                                client.println();
 
-                            client.println(responsegetSettings());
-                            break;
-                        default:
-                            client.println("HTTP/1.1 404 OK");
-                            client.println("Content-type:text/html");
-                            client.println("Connection: close");
-                            client.println();
+                                client.println(responseCSS());
+                                break;
+                            case 3:
+                                // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+                                // and a content-type so the client knows what's coming, then a blank line:
+                                client.println("HTTP/1.1 200 OK");
+                                client.println("Content-type:application/json");
+                                client.println("X-Powered-By: ESP32");
+                                client.println("Connection: close");
+                                client.println();
 
+                                client.println(responsegetSettings());
+                                break;
+                            default:
+                                client.println("HTTP/1.1 404 OK");
+                                client.println("Content-type:text/html");
+                                client.println("Connection: close");
+                                client.println();
+
+                                break;
+                            }
+
+                            // The HTTP response ends with another blank line
+                            client.println();
+                            // Break out of the while loop
                             break;
                         }
-
-                        // The HTTP response ends with another blank line
-                        client.println();
-                        // Break out of the while loop
-                        break;
+                        else
+                        { // if you got a newline, then clear currentLine
+                            currentLine = "";
+                        }
                     }
-                    else
-                    { // if you got a newline, then clear currentLine
-                        currentLine = "";
+                    else if (c != '\r')
+                    {                     // if you got anything else but a carriage return character,
+                        currentLine += c; // add it to the end of the currentLine
                     }
-                }
-                else if (c != '\r')
-                {                     // if you got anything else but a carriage return character,
-                    currentLine += c; // add it to the end of the currentLine
-                }
 
-                if (currentLine.endsWith("GET / HTTP"))
-                {
-                    // digitalWrite(5, HIGH); // GET /H turns the LED on
-                    // ArmSystem();
+                    if (currentLine.endsWith("GET / HTTP"))
+                    {
+                        // digitalWrite(5, HIGH); // GET /H turns the LED on
+                        // ArmSystem();
 
-                    Serial.println("GET  ROOT ");
-                    returnPage = 0;
-                }
+                        Serial.println("GET  ROOT ");
+                        returnPage = 0;
+                    }
 
-                if (currentLine.endsWith("GET /build/bundle.js"))
-                {
-                    // digitalWrite(5, HIGH); // GET /H turns the LED on
-                    // ArmSystem();
-                    returnPage = 1;
-                    Serial.println("GET  +++++++++ bundle");
-                }
+                    if (currentLine.endsWith("GET /build/bundle.js"))
+                    {
+                        // digitalWrite(5, HIGH); // GET /H turns the LED on
+                        // ArmSystem();
+                        returnPage = 1;
+                        Serial.println("GET  +++++++++ bundle");
+                    }
 
-                if (currentLine.endsWith("GET /build/bundle.css"))
-                {
-                    // digitalWrite(5, HIGH); // GET /H turns the LED on
-                    // ArmSystem();
-                    returnPage = 2;
-                    Serial.println("GET  +++++++++ CSS");
-                }
+                    if (currentLine.endsWith("GET /build/bundle.css"))
+                    {
+                        // digitalWrite(5, HIGH); // GET /H turns the LED on
+                        // ArmSystem();
+                        returnPage = 2;
+                        Serial.println("GET  +++++++++ CSS");
+                    }
 
-                if (currentLine.endsWith("GET /getsettings HTTP"))
-                {
-                    // digitalWrite(5, HIGH); // GET /H turns the LED on
-                    // ArmSystem();
-                    returnPage = 3;
-                    Serial.println("GET  +++++++++ CSS");
+                    if (currentLine.endsWith("GET /getsettings HTTP"))
+                    {
+                        // digitalWrite(5, HIGH); // GET /H turns the LED on
+                        // ArmSystem();
+                        returnPage = 3;
+                        Serial.println("GET  +++++++++ CSS");
+                    }
                 }
             }
+            // Clear the header variable
+            header = "";
+            // Close the connection
+            client.stop();
+            Serial.println("Client disconnected.");
+            Serial.println("");
         }
-        // Clear the header variable
-        header = "";
-        // Close the connection
-        client.stop();
-        Serial.println("Client disconnected.");
-        Serial.println("");
-    }
 
+    */
     ocsClass.loop();
     // WifiLoop();
 }

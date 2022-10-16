@@ -248,4 +248,16 @@
  .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson/Configuration.hpp \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src/Preferences.h \
  include/../lib/ocs_arduino_library/src/opencommunitysafety.cpp \
- include/../lib/ocs_arduino_library/src/Outputpin.cpp
+ include/../lib/ocs_arduino_library/src/Outputpin.cpp \
+ include/../lib/ocs_arduino_library/src/WebServer.cpp \
+ .pio/libdeps/az-delivery-devkit-v4/AsyncTCP-esphome/src/AsyncTCP.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/pbuf.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/err.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/ESPAsyncWebServer.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/StringArray.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/WebResponseImpl.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/WebHandlerImpl.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSocket.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSynchronization.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncEventSource.h
