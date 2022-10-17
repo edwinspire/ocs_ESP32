@@ -4,8 +4,6 @@
 #include <Preferences.h>
 #include <WiFi.h>
 
-#include <cstdio>
-using namespace std;
 
 //#include <../include/wifi.cpp>
 #include <../lib/ocs_arduino_library/src/opencommunitysafety.cpp>
