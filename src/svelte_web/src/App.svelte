@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte/internal";
+  var MAX_SSID = 3;
   var deviceSettings = {
     websocketHost: "",
     CACert: "",
@@ -23,7 +24,28 @@
         };
       });
     } else {
-      x.innerHTML = "Geolocation is not supported by this browser.";
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  async function setSettings() {
+    if (confirm("Desea guardar los cambios?")) {
+      try {
+        let response = await fetch("/setsettings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(deviceSettings),
+        });
+        let data = await response.json();
+        console.log(data);
+        if (data) {
+          alert("Guardado");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -34,9 +56,11 @@
     console.log("Retorna settings", deviceSettings);
 
     if (data) {
+      MAX_SSID = data.MAX_SSID || 3;
+
       deviceSettings = {
-        CACert : data.CACert ||'',
-        websocketHost: data.websocketHost || '',
+        CACert: data.CACert || "",
+        websocketHost: data.websocketHost || "",
         latitude: data.latitude || 0,
         longitude: data.longitude || 0,
         deviceId: data.deviceId || "",
@@ -48,11 +72,22 @@
           deviceSettings.ssid.push({ ssid: element.ssid, pwd: element.pwd });
         });
       }
-    }
-  }
 
-  function setSettings() {
-    alert("Se guardará la configuracion");
+      let ssid_length = MAX_SSID + 1;
+      if (deviceSettings.ssid) {
+        ssid_length = MAX_SSID - deviceSettings.ssid.length;
+      }
+
+      console.log(deviceSettings, ssid_length);
+
+      let i = 0;
+      while (i < ssid_length) {
+        deviceSettings.ssid.push({ ssid: "", pwd: "" });
+        i++;
+      }
+
+      console.log("settings: ", deviceSettings);
+    }
   }
 
   onMount(async () => {});
@@ -90,7 +125,7 @@
     <input
       type="text"
       name="pbl"
-      maxlength="75"
+      maxlength="50"
       bind:value={deviceSettings.input01.name}
     />
   </div>
@@ -102,15 +137,19 @@
     <div class="flex-container">
       <div class="flex-item">
         {#each deviceSettings.ssid as { wifi }, i}
-          <label for="fname">SSID {i}</label>
-          <input type="text" bind:value={deviceSettings.ssid[1].ssid} />
+          <label for="fname">SSID {i + 1}</label>
+          <input
+            type="text"
+            maxlength="15"
+            bind:value={deviceSettings.ssid[i].ssid}
+          />
         {/each}
       </div>
 
       <div class="flex-item">
         {#each deviceSettings.ssid as { wifi }, i}
-          <label for="lname">Password {i}</label>
-          <input type="password" bind:value={deviceSettings.ssid[0].pwd} />
+          <label for="lname">Password {i + 1}</label>
+          <input type="password" bind:value={deviceSettings.ssid[i].pwd} />
         {/each}
       </div>
     </div>
@@ -134,6 +173,11 @@
         >Get Geolocation</button
       >
     </div>
+    <a
+      target="_blank"
+      href={`https://www.openstreetmap.org/?mlat=${deviceSettings.latitude}&mlon=${deviceSettings.longitude}#map=19/${deviceSettings.latitude}/${deviceSettings.longitude}`}
+      >Show map</a
+    >
   </div>
 
   <br />

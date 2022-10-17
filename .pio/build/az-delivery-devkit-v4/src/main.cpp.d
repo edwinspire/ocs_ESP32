@@ -260,4 +260,5 @@
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/WebHandlerImpl.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSocket.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSynchronization.h \
- .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncEventSource.h
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncEventSource.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncJson.h
