@@ -1,28 +1,26 @@
-#include <WiFiMulti.h>
-#include <ArduinoWebsockets.h>
-#include <ArduinoJson.h>
-#include <Preferences.h>
+#ifdef ESP32
 #include <WiFi.h>
+#include <WiFiMulti.h>
+#elif defined(ESP8266)
+#include <ESP8266WiFiMulti.h>
+#include <ESP8266WiFi.h>
+#endif
 
+const String ESP_BOARD = "ESP32_DEVKITC_V4";
 
-//#include <../include/wifi.cpp>
-#include <../lib/ocs_arduino_library/src/opencommunitysafety.cpp>
-#include <../lib/ocs_arduino_library/src/WebServer.cpp>
-#include "AsyncJson.h"
+#include <opencommunitysafety.cpp>
 
-using namespace websockets;
+// using namespace websockets;
 using namespace ocs;
 
-WebAdmin ocsWebAdmin(80);
-
-Preferences pref;
-String deviceId = "";
+#ifdef ESP32
+WiFiMulti wifiMulti;
+#elif defined(ESP8266)
+ESP8266WiFiMulti wifiMulti;
+#endif
 
 ocs::OpenCommunitySafety ocsClass;
-const int gpio_in_01 = 32;
-const int gpio_out_01 = 21;
-const String websockets_server_host = "wss://open-community-safety.herokuapp.com/ws/device";
-
+/*
 const char *echo_org_ssl_ca_cert = R"(-----BEGIN CERTIFICATE-----
 MIIEDzCCAvegAwIBAgIBADANBgkqhkiG9w0BAQUFADBoMQswCQYDVQQGEwJVUzEl
 MCMGA1UEChMcU3RhcmZpZWxkIFRlY2hub2xvZ2llcywgSW5jLjEyMDAGA1UECxMp
@@ -48,88 +46,60 @@ VSJYACPq4xJDKVtHCN2MQWplBqjlIapBtJUhlbl90TSrE9atvNziPTnNvT51cKEY
 WQPJIrSPnNVeKtelttQKbfi3QBFGmh95DmK/D5fs4C8fF5Q=
 -----END CERTIFICATE-----
 )";
+*/
 
-WiFiMulti wifiMulti;
+#ifdef ESP32
 
-void cb(WiFiClient *client, String path, String method)
-{
-    Serial.println("Entra en el callback " + method);
-}
+const int gpio_in_01 = 32;
+const int gpio_out_01 = 21;
 
-void notFound(AsyncWebServerRequest *request)
-{
-    request->send(404, "text/plain", "Not found");
-}
+#elif defined(ESP8266)
 
-void getSettings(AsyncWebServerRequest *request)
-{
-    String outputJson = "";
-    serializeJson(ocsClass.toJson(), outputJson);
-    request->send(200, "application/json", outputJson);
-}
+const int gpio_in_01 = 0;
+const int gpio_out_01 = 2;
 
-AsyncCallbackJsonWebHandler *handlerBody = new AsyncCallbackJsonWebHandler("/setsettings", [](AsyncWebServerRequest *request, JsonVariant &json)
-                                                                           {
-ocsClass.setFromJson(json);
-    request->send(200, "application/json", "{}"); });
+#endif
 
 void setup()
 {
 
-    Serial.begin(115200);
-    delay(10);
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+  delay(10000);
+  ocsClass.setup();
 
-    ocsWebAdmin.on("/getsettings", getSettings);
-    // ocsWebAdmin.on("/setsettings", HTTP_POST, onRequest, onUpload, setSettings);
-    ocsWebAdmin.addHandler(handlerBody); // Para poder leer el body enviado en el request
+  for (byte i = 0; i < ocs::MAX_SSID_WIFI; i = i + 1)
+  {
 
-    ocsWebAdmin.onNotFound(notFound);
-    ocsWebAdmin.setup();
-    //   ocsWebAdmin.onRequest(cb);
-    ocsClass.setSSID(0, "ocsdefault", "ocs@qwerty"); // Valor por default
-    ocsClass.setSSID(1, "edwinspire", "Caracol1980");
-    ocsClass.setSSID(2, "edwinspiremovil", "libp1983");
-
-    ocsClass.setup(websockets_server_host, deviceId, gpio_in_01, gpio_out_01, echo_org_ssl_ca_cert);
-
-    delay(1000);
-
-    int size = ocsClass.getMaxSSIDs();
-
-    for (uint i = 0; i < size; i = i + 1)
+    if (ocsClass.ConfigParameter.wifi[i].ssid.length() > 5)
     {
-        WifiParams wps = ocsClass.getSSID(i);
-        if (wps.ssid.length() > 5)
-        {
-            Serial.println("Add SSID => " + wps.ssid);
-            wifiMulti.addAP(wps.ssid.c_str(), wps.pwd.c_str());
-        }
+      Serial.println("Add SSID => " + ocsClass.ConfigParameter.wifi[i].ssid);
+      wifiMulti.addAP(ocsClass.ConfigParameter.wifi[i].ssid.c_str(), ocsClass.ConfigParameter.wifi[i].pwd.c_str());
     }
+  }
 
-    Serial.println("Connecting Wifi...");
+  Serial.println(F("Connecting Wifi..."));
 
-    if (wifiMulti.run() == WL_CONNECTED)
-    {
-        Serial.println("");
-        Serial.println("WiFi connected");
-        Serial.println("IP address: ");
-        Serial.println(WiFi.localIP());
-        ocsWebAdmin.begin();
-        // server.begin();
-        // ocsWebAdmin.setup();
-
-        ocsClass.connectWS();
-    }
+  if (wifiMulti.run() == WL_CONNECTED)
+  {
+    Serial.println(F("WiFi connected"));
+    Serial.println(F("IP address: "));
+    Serial.println(WiFi.localIP());
+    ocsClass.begin();
+    ocsClass.connectWS();
+  }
 }
 
 void loop()
 {
-
-    if (wifiMulti.run() != WL_CONNECTED)
-    {
-        Serial.println("WiFi not connected!");
-        delay(1000);
-    }
-
-    ocsClass.loop();
+ // Serial.println(F("Loop principal!"));
+  //Serial.println(WiFi.localIP());
+  // delay(3000);
+  //  put your main code here, to run repeatedly:
+  if (wifiMulti.run() != WL_CONNECTED)
+  {
+    Serial.println(F("WiFi not connected!"));
+    delay(1000);
+  }
+  ocsClass.loop();
 }

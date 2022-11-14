@@ -1,5 +1,4 @@
 .pio/build/az-delivery-devkit-v4/src/main.cpp.o: src/main.cpp \
- C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiMulti.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/cores/esp32/Print.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
@@ -188,6 +187,12 @@
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiMulti.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
+ .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/opencommunitysafety.cpp \
+ .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson.h \
+ .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson.hpp \
+ .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson/Configuration.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/ArduinoWebsockets.h \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/message.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/internals/ws_common.hpp \
@@ -197,7 +202,6 @@
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/network/tcp_socket.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/network/tcp_server.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/network/generic_esp/generic_esp_clients.hpp \
- C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src/HTTPClient.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src/WiFiClientSecure.h \
@@ -243,18 +247,15 @@
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/client.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/internals/websockets_endpoint.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/server.hpp \
- .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson.h \
- .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson.hpp \
- .pio/libdeps/az-delivery-devkit-v4/ArduinoJson/src/ArduinoJson/Configuration.hpp \
- C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src/Preferences.h \
- include/../lib/ocs_arduino_library/src/opencommunitysafety.cpp \
- include/../lib/ocs_arduino_library/src/Outputpin.cpp \
- include/../lib/ocs_arduino_library/src/WebServer.cpp \
+ .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/Outputpin.cpp \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src/EEPROM.h \
+ .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/WebServer.cpp \
  .pio/libdeps/az-delivery-devkit-v4/AsyncTCP-esphome/src/AsyncTCP.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/pbuf.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/err.h \
- .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/ESPAsyncWebServer.h \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src/SPIFFS.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/ESPAsyncWebServer.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/StringArray.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/WebResponseImpl.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/WebHandlerImpl.h \
