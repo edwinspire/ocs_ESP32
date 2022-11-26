@@ -248,7 +248,6 @@
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/internals/websockets_endpoint.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ArduinoWebsockets/src/tiny_websockets/server.hpp \
  .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/Outputpin.cpp \
- C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src/EEPROM.h \
  .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/WebServer.cpp \
  .pio/libdeps/az-delivery-devkit-v4/AsyncTCP-esphome/src/AsyncTCP.h \
  C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/lwip/lwip/src/include/lwip/pbuf.h \
@@ -262,4 +261,7 @@
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSocket.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncWebSynchronization.h \
  .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncEventSource.h \
- .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncJson.h
+ .pio/libdeps/az-delivery-devkit-v4/ESPAsyncWebServer-esphome/src/AsyncJson.h \
+ .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/Inputpin.cpp \
+ .pio/libdeps/az-delivery-devkit-v4/ocsArduinoLib/src/LocalStore.cpp \
+ C:/Users/edelacruz/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src/EEPROM.h
