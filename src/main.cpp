@@ -10,7 +10,6 @@ const String ESP_BOARD = "ESP32_DEVKITC_V4";
 
 #include <opencommunitysafety.cpp>
 
-// using namespace websockets;
 using namespace ocs;
 
 #ifdef ESP32
