@@ -5,6 +5,7 @@
         "istream": "cpp",
         "ostream": "cpp",
         "streambuf": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "string_view": "cpp"
     }
 }
