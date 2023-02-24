@@ -20,7 +20,7 @@ ESP8266WiFiMulti wifiMulti;
 #endif
 
 ocs::OpenCommunitySafety ocsClass;
-edwinspire::Interval interval1;
+edwinspire::Interval intervalConnectWiFi;
 
 #ifdef ESP32
 
@@ -81,12 +81,12 @@ void setup()
   }
 
   wifi_reconnect();
-  interval1.setup(15000, &wifi_reconnect); // check wifi each 15 seconds
+  intervalConnectWiFi.setup(15000, &wifi_reconnect); // check wifi each 15 seconds
 
 }
 
 void loop()
 {
   ocsClass.loop();
-  interval1.loop();
+  intervalConnectWiFi.loop();
 }
