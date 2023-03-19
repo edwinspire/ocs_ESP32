@@ -22,6 +22,8 @@ ESP8266WiFiMulti wifiMulti;
 ocs::OpenCommunitySafety ocsClass;
 edwinspire::Interval intervalConnectWiFi;
 
+const uint32_t connectTimeoutMs = 10000;
+
 #ifdef ESP32
 
 const int gpio_in_01 = 32;
@@ -41,21 +43,24 @@ void wifi_reconnect()
 
   if (WiFi.status() == WL_CONNECTED)
   {
-    Serial.println("Está conectado...");
+    Serial.println(F("Está conectado... "));
+    Serial.println(WiFi.SSID());
+    Serial.println(WiFi.localIP());
   }
   else
   {
     Serial.println(F("Connecting Wifi..."));
-    if (wifiMulti.run() == WL_CONNECTED)
+    if (wifiMulti.run(connectTimeoutMs) == WL_CONNECTED)
     {
       Serial.println(F("WiFi connected"));
-      Serial.println(F("IP address: "));
-      Serial.println(WiFi.localIP());
-      Serial.println(WiFi.SSID());
+      // Serial.println(F("IP address: "));
+      // Serial.println(WiFi.localIP());
+      // Serial.println(WiFi.SSID());
       ocsClass.ip = WiFi.localIP().toString();
       ocsClass.ssid = WiFi.SSID();
       ocsClass.begin();
-      ocsClass.connectWS();
+      ocsClass.connect_websocket();
+      //   ocsClass.connectWS();
     }
     // WiFi.disconnect();
   }
