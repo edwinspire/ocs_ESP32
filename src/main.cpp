@@ -22,12 +22,12 @@ ESP8266WiFiMulti wifiMulti;
 ocs::OpenCommunitySafety ocsClass;
 edwinspire::Interval intervalConnectWiFi;
 
-const uint32_t connectTimeoutMs = 10000;
+//const uint32_t connectTimeoutMs = 10000;
 
 #ifdef ESP32
 
-const int gpio_in_01 = 32;
-const int gpio_out_01 = 21;
+//const int gpio_in_01 = 32;
+//const int gpio_out_01 = 21;
 
 #elif defined(ESP8266)
 
@@ -46,13 +46,18 @@ void wifi_reconnect()
     Serial.println(F("Está conectado... "));
     Serial.println(WiFi.SSID());
     Serial.println(WiFi.localIP());
+    ocsClass.WifiConnected = true;
   }
   else
   {
+    ocsClass.WifiConnected = false;
     Serial.println(F("Connecting Wifi..."));
-    if (wifiMulti.run(connectTimeoutMs) == WL_CONNECTED)
+    Serial.println(WiFi.status());
+    if (wifiMulti.run() == WL_CONNECTED)
     {
-      Serial.println(F("WiFi connected"));
+      ocsClass.WifiConnected = true;
+      Serial.println(F("WiFi is connected"));
+    
       // Serial.println(F("IP address: "));
       // Serial.println(WiFi.localIP());
       // Serial.println(WiFi.SSID());
@@ -68,16 +73,15 @@ void wifi_reconnect()
 
 void setup()
 {
-
   // put your setup code here, to run once:
   Serial.begin(115200);
-  delay(5000);
+  // delay(5000);
   ocsClass.setup();
+  delay(5000);
 
-  Serial.println("MAX_SSID_WIFI => " + String(ocs::MAX_SSID_WIFI));
   for (byte i = 0; i < ocs::MAX_SSID_WIFI; i = i + 1)
   {
-    Serial.println("SSID => " + ocsClass.ConfigParameter.wifi[i].ssid);
+
     if (ocsClass.ConfigParameter.wifi[i].ssid.length() > 5)
     {
       Serial.println("Add SSID => " + ocsClass.ConfigParameter.wifi[i].ssid);
@@ -86,12 +90,11 @@ void setup()
   }
 
   wifi_reconnect();
-  intervalConnectWiFi.setup(15000, &wifi_reconnect); // check wifi each 15 seconds
-
+  intervalConnectWiFi.setup(30000, &wifi_reconnect); // check wifi each 15 seconds
 }
 
 void loop()
 {
-  ocsClass.loop();
   intervalConnectWiFi.loop();
+  ocsClass.loop();  
 }
