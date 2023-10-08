@@ -7,5 +7,6 @@
         "streambuf": "cpp",
         "regex": "cpp",
         "string_view": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }

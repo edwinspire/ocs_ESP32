@@ -1,0 +1,81 @@
+{
+    "device": {
+        "name": "casa",
+        "device_id": "65765765767474",
+        "model": "ssdasdasda",
+        "version": "1.09977",
+        "pwd_adm": "9999999999",
+        "pwd_user": "00000000000",
+        "entry_delay": 60
+    },
+    "server": {
+        "wsserver": "ws://742746287647268426",
+        "username": "dfsdfsdf",
+        "password": "rerwerwer",
+        "certificate": "jjgjhg675454fggc453sxgfgg555"
+    },
+    "intervals": [
+        {
+            "up": 100,
+            "down": 23,
+            "time": 60
+        },
+        {
+            "up": 10,
+            "down": 20,
+            "time": 90
+        }
+    ],
+    "outs": [
+        {
+            "gpio": 10,
+            "enabled": true,
+            "name": "sirena",
+            "alias": "ocs"
+        },
+        {
+            "gpio": 1,
+            "enabled": false,
+            "name": "sirena_interior",
+            "alias": "ocs"
+        },
+        {
+            "gpio": 20,
+            "enabled": true,
+            "name": "foco_sala",
+            "alias": "foco_sala"
+        }
+    ],
+    "inputs": [
+        {
+            "gpio": 5,
+            "name": "Pulsador caja 1",
+            "alias": "ocs",
+            "enabled": true,
+            "contact_type": 1, // Enum 1: Normal Open, 2: Normal Close, 0: No used,
+            "zone_type": 2, // Enum 0: Normal, 1: Delay, 2: Always, 3: Interior, 6: Switch, 7: Toggle, 8: Arma/Disarm
+            "outs": [
+                {
+                    "gpio": 20,
+                    "interva": 1
+                }
+            ],
+            "report": true
+        },
+        {
+            "gpio": 3,
+            "name": "Pulsador caja 1",
+            "alias": "ocs",
+            "enabled": true,
+            "contact_type": 2, // Enum 1: Normal Open, 2: Normal Close, 0: No used,
+            "zone_type": 8, // Enum 0: Normal, 1: Delay, 2: Always, 3: Interior, 6: Switch, 7: Toggle, 8: Arma/Disarm
+            "outs": [
+                {
+                    "gpio": 20,
+                    "interva": 2
+                }
+            ],
+            "report": true
+        }
+    ]
+}
